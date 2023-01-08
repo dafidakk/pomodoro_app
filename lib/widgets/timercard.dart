@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_app/utils.dart';
+import 'package:provider/provider.dart';
+import '../timeservice.dart';
 
 class TimerCard extends StatelessWidget {
   const TimerCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TimerService>(context);
+    final seconds = provider.currentDuration % 60;
     return Column(
       children: [
         Text(
-          "FOCUS",
+          provider.currentState,
           style: textStyle(35, Colors.white, FontWeight.w700),
         ),
         SizedBox(
@@ -34,7 +38,7 @@ class TimerCard extends StatelessWidget {
                   ]),
               child: Center(
                 child: Text(
-                  "25",
+                  (provider.currentDuration ~/ 60).toString(),
                   style: textStyle(80, Colors.redAccent, FontWeight.bold),
                 ),
               ),
@@ -65,7 +69,9 @@ class TimerCard extends StatelessWidget {
                   ]),
               child: Center(
                 child: Text(
-                  "00",
+                  seconds == 0
+                      ? "${seconds.round()}0"
+                      : seconds.round().toString(),
                   style: textStyle(80, Colors.redAccent, FontWeight.bold),
                 ),
               ),
