@@ -1,11 +1,19 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pomodoro_app/utils.dart';
 import 'package:provider/provider.dart';
 import '../timeservice.dart';
 
-class TimerCard extends StatelessWidget {
+class TimerCard extends StatefulWidget {
   const TimerCard({super.key});
 
+  @override
+  State<TimerCard> createState() => _TimerCardState();
+}
+
+class _TimerCardState extends State<TimerCard> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TimerService>(context);
@@ -39,7 +47,8 @@ class TimerCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   (provider.currentDuration ~/ 60).toString(),
-                  style: textStyle(80, Colors.redAccent, FontWeight.bold),
+                  style: textStyle(
+                      80, renderColor(provider.currentState), FontWeight.bold),
                 ),
               ),
             ),
@@ -48,7 +57,7 @@ class TimerCard extends StatelessWidget {
             ),
             Text(
               ":",
-              style: textStyle(60, Colors.red.shade200, FontWeight.bold),
+              style: textStyle(60, provider.colonColor, FontWeight.bold),
             ),
             SizedBox(
               width: 10,
@@ -72,7 +81,8 @@ class TimerCard extends StatelessWidget {
                   seconds == 0
                       ? "${seconds.round()}0"
                       : seconds.round().toString(),
-                  style: textStyle(80, Colors.redAccent, FontWeight.bold),
+                  style: textStyle(
+                      80, renderColor(provider.currentState), FontWeight.bold),
                 ),
               ),
             ),
