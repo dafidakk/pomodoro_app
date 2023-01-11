@@ -7,9 +7,14 @@ import 'package:pomodoro_app/widgets/timercard.dart';
 import 'package:pomodoro_app/widgets/timeroptions.dart';
 import 'package:provider/provider.dart';
 
-class PomodoroScreen extends StatelessWidget {
+class PomodoroScreen extends StatefulWidget {
   const PomodoroScreen({super.key});
 
+  @override
+  State<PomodoroScreen> createState() => _PomodoroScreenState();
+}
+
+class _PomodoroScreenState extends State<PomodoroScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TimerService>(context);
@@ -32,6 +37,21 @@ class PomodoroScreen extends StatelessWidget {
             ),
             iconSize: 40,
           ),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  Provider.of<TimerService>(context, listen: false).soundOn =
+                      !Provider.of<TimerService>(context, listen: false)
+                          .soundOn;
+                });
+              },
+              icon: Icon(
+                provider.soundOn
+                    ? Icons.volume_up_sharp
+                    : Icons.volume_off_sharp,
+                color: Color.fromARGB(255, 177, 165, 170),
+                size: 40,
+              ))
         ],
       ),
       body: SingleChildScrollView(

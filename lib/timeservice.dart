@@ -1,16 +1,26 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class TimerService extends ChangeNotifier {
   late Timer timer;
-  double currentDuration = 1500;
-  double selectedTime = 1500;
+  double currentDuration = 10;
+  double selectedTime = 10;
   bool timerPlaying = false;
   String currentState = "FOCUS";
   int rounds = 0;
   int goal = 0;
   int number = 0;
   Color colonColor = Colors.black;
+  bool soundOn = true;
+
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  // playSound(String soundPath) async {
+  //   if (soundOn) {
+  //     await audioPlayer.play(AssetSource(soundPath));
+  //   }
+  // }
 
   void start() {
     timerPlaying = true;
@@ -21,6 +31,12 @@ class TimerService extends ChangeNotifier {
         currentDuration--;
         changeColor();
         number++;
+        // playSound("344.mp3");
+        if (soundOn) {
+          audioPlayer.play(AssetSource("344.mp3"));
+        } else if (!soundOn) {
+          audioPlayer.stop();
+        }
         notifyListeners();
       }
     });
@@ -37,7 +53,7 @@ class TimerService extends ChangeNotifier {
   void reset() {
     timer.cancel();
     currentState = "FOCUS";
-    currentDuration = selectedTime = 1500;
+    currentDuration = selectedTime = 10;
     rounds = goal = 0;
     timerPlaying = false;
     notifyListeners();
@@ -46,6 +62,7 @@ class TimerService extends ChangeNotifier {
   void pause() {
     timer.cancel();
     timerPlaying = false;
+    audioPlayer.pause();
     notifyListeners();
   }
 
@@ -57,25 +74,36 @@ class TimerService extends ChangeNotifier {
 
   void handleNextRound() {
     if (currentState == "FOCUS" && rounds != 3) {
+      if (soundOn) {
+          audioPlayer.play(AssetSource("bell-counter-a.wav"));
+        } else if (!soundOn) {
+          audioPlayer.stop();
+        }
+      
       currentState = "BREAK";
-      currentDuration = 300;
-      selectedTime = 300;
+      currentDuration = 10;
+      selectedTime = 10;
       rounds++;
       goal++;
     } else if (currentState == "BREAK") {
       currentState = "FOCUS";
-      currentDuration = 1500;
-      selectedTime = 1500;
+      currentDuration = 10;
+      selectedTime = 10;
     } else if (currentState == "FOCUS" && rounds == 3) {
+      if (soundOn) {
+          audioPlayer.play(AssetSource("bell-counter-a.wav"));
+        } else if (!soundOn) {
+          audioPlayer.stop();
+        }
       currentState = "LONGBREAK";
-      currentDuration = 1500;
-      selectedTime = 1500;
+      currentDuration = 10;
+      selectedTime = 10;
       rounds++;
       goal++;
     } else if (currentState == "LONGBREAK") {
       currentState = "FOCUS";
-      currentDuration = 1500;
-      selectedTime = 1500;
+      currentDuration = 10;
+      selectedTime = 10;
       rounds = 0;
     }
     notifyListeners();
